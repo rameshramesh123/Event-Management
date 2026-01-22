@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings | EventPro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --sidebar-bg: #1e293b;
+            --bg-light: #f8f9fc;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            margin: 0;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 260px;
+            min-height: 100vh;
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            position: fixed;
+        }
+
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar a {
+            color: #94a3b8;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            margin: 5px 15px;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .sidebar a i { margin-right: 12px; }
+
+        .sidebar a:hover, .sidebar a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-wrapper {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+        }
+
+        .header-banner {
+            background: var(--primary-gradient);
+            padding: 40px 30px;
+            color: white;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        /* --- TABLE & CARD --- */
+        .content-card {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .table thead {
+            background-color: #f8fafc;
+        }
+
+        .table th {
+            border: none;
+            color: #64748b;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            padding: 20px;
+        }
+
+        .table td {
+            padding: 20px;
+            vertical-align: middle;
+            color: #334155;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .event-title {
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .badge-date {
+            background-color: #eef2ff;
+            color: #4361ee;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .btn-back {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-back:hover {
+            background: #f8f9fc;
+            color: #764ba2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="d-flex">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h4 class="text-white fw-bold"><i class="fas fa-calendar-check me-2"></i>EventPro</h4>
+        </div>
+        <div class="mt-4">
+            <a th:href="@{/user/dashboard}"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a th:href="@{/user/events}"><i class="fas fa-search"></i> Browse Events</a>
+            <a th:href="@{/user/booked-events}" class="active"><i class="fas fa-ticket-alt"></i> My Bookings</a>
+            <hr class="mx-3" style="border-color: rgba(255,255,255,0.1);">
+            <a th:href="@{/logout}" class="text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+        <div class="header-banner d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-1">My Booked Events</h2>
+                <p class="mb-0 opacity-75">View and manage your upcoming event tickets</p>
+            </div>
+            <a th:href="@{/user/events}" class="btn-back">
+                <i class="fas fa-plus me-2"></i>Book More
+            </a>
+        </div>
+
+        <div class="px-4">
+            <div class="card content-card">
+                <div class="table-responsive">
+                    <table class="table mb-0">
+                        <thead>
+                        <tr>
+                            <th>Event Details</th>
+                            <th>Location</th>
+                            <th>Event Date</th>
+                            <th>Booking Confirmed On</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="booking : ${bookings}">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="rounded-circle bg-light p-2 me-3 text-primary text-center" style="width: 40px; height: 40px;">
+                                        <i class="fas fa-ticket"></i>
+                                    </div>
+                                    <span class="event-title" th:text="${booking.event.title}">Concert</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="text-muted"><i class="fas fa-map-marker-alt me-1 text-danger"></i> <span th:text="${booking.event.location}">Venue</span></span>
+                            </td>
+                            <td>
+                                <span class="badge-date" th:text="${booking.event.eventDate}">2023-12-01</span>
+                            </td>
+                            <td class="text-muted" th:text="${booking.bookingDate}">
+                                2023-11-20
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(bookings)}">
+                            <td colspan="4" class="text-center py-5">
+                                <img src="https://cdn-icons-png.flaticon.com/512/4076/4076432.png" width="80" class="mb-3 opacity-50">
+                                <h5 class="text-muted">No events booked yet</h5>
+                                <p class="small text-muted">Go to the events page to find something exciting!</p>
+                                <a th:href="@{/user/events}" class="btn btn-primary btn-sm rounded-pill px-4">Find Events</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

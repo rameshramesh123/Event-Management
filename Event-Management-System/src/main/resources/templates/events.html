@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Available Events | EventPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+  <style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8f9fc;
+        padding-bottom: 50px;
+    }
+
+    .header-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 60px 0;
+        color: white;
+        margin-bottom: 40px;
+        border-radius: 0 0 40px 40px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .event-card {
+        border: none;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        background: white;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .event-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+    }
+
+    .event-icon {
+        width: 60px;
+        height: 60px;
+        background: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+    }
+
+    .date-badge {
+        background-color: #f1f5f9;
+        color: #475569;
+        font-weight: 600;
+        font-size: 0.8rem;
+        padding: 5px 12px;
+        border-radius: 8px;
+    }
+
+    .btn-book {
+        background: linear-gradient(to right, #667eea, #764ba2);
+        border: none;
+        color: white;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: 600;
+        transition: opacity 0.3s;
+    }
+
+    .btn-book:hover {
+        opacity: 0.9;
+        color: white;
+    }
+
+    .status-booked {
+        background-color: #dcfce7;
+        color: #15803d;
+        font-weight: 700;
+        padding: 10px;
+        border-radius: 10px;
+        display: block;
+        text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header-section text-center">
+  <div class="container">
+    <h1 class="fw-bold">Available Events</h1>
+    <p class="opacity-75">Find and book your next great experience</p>
+    <a th:href="@{/user/dashboard}" class="text-white text-decoration-none small">
+      <i class="fas fa-arrow-left me-1"></i> Back to Dashboard
+    </a>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 mb-4" th:each="event : ${events}">
+      <div class="card event-card shadow-sm p-4">
+        <div class="d-flex justify-content-between align-items-start">
+          <div class="event-icon">
+            <i class="fas fa-calendar-star"></i>
+          </div>
+          <span class="date-badge" th:text="${event.eventDate}">2023-12-01</span>
+        </div>
+
+        <h4 class="fw-bold mt-2 mb-1 text-dark" th:text="${event.title}">Concert</h4>
+        <p class="text-muted mb-4">
+          <i class="fas fa-map-marker-alt me-1 text-danger"></i>
+          <span th:text="${event.location}">New York</span>
+        </p>
+
+        <div class="mt-auto">
+          <div th:if="${bookedEventIds.contains(event.id)}" class="status-booked">
+            <i class="fas fa-check-circle me-1"></i> Already Booked
+          </div>
+
+          <a th:if="${!bookedEventIds.contains(event.id)}"
+             th:href="@{/user/book/{id}(id=${event.id})}"
+             class="btn btn-book w-100">
+            Book This Event
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 text-center py-5" th:if="${#lists.isEmpty(events)}">
+      <i class="fas fa-calendar-times fa-4x text-muted mb-3"></i>
+      <h3 class="text-muted">No events available right now.</h3>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

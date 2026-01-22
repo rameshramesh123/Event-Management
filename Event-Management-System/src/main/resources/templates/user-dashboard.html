@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Dashboard | EventPro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+
+  <style>
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --sidebar-bg: #1e293b;
+        --bg-light: #f8f9fc;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--bg-light);
+        margin: 0;
+    }
+
+    /* --- SIDEBAR --- */
+    .sidebar {
+        width: 260px;
+        min-height: 100vh;
+        background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+        position: fixed;
+        transition: all 0.3s;
+    }
+
+    .sidebar-header {
+        padding: 30px 20px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sidebar a {
+        color: #94a3b8;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        padding: 15px 25px;
+        margin: 5px 15px;
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+
+    .sidebar a i { margin-right: 12px; }
+
+    .sidebar a:hover, .sidebar a.active {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+    }
+
+    /* --- MAIN CONTENT --- */
+    .main-wrapper {
+        margin-left: 260px;
+        width: calc(100% - 260px);
+    }
+
+    .top-nav {
+        background: #fff;
+        padding: 15px 30px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    /* --- CARDS --- */
+    .stat-card {
+        border: none;
+        border-radius: 20px;
+        transition: transform 0.3s ease;
+        color: white;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .bg-event { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .bg-booked { background: linear-gradient(135deg, #22c55e 0%, #15803d 100%); }
+
+    .btn-glass {
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        color: white;
+        backdrop-filter: blur(5px);
+        border-radius: 10px;
+    }
+
+    .btn-glass:hover {
+        background: rgba(255, 255, 255, 0.3);
+        color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div class="d-flex">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <h4 class="text-white fw-bold"><i class="fas fa-calendar-check me-2"></i>EventPro</h4>
+    </div>
+    <div class="mt-4">
+      <a th:href="@{/user/dashboard}" class="active"><i class="fas fa-th-large"></i> Dashboard</a>
+      <a th:href="@{/user/events}"><i class="fas fa-search"></i> Browse Events</a>
+      <a th:href="@{/user/booked-events}"><i class="fas fa-ticket-alt"></i> My Bookings</a>
+      <hr class="mx-3" style="border-color: rgba(255,255,255,0.1);">
+      <a th:href="@{/logout}" class="text-danger"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+  </div>
+
+  <div class="main-wrapper">
+    <nav class="top-nav d-flex justify-content-between align-items-center">
+      <h5 class="fw-bold mb-0 text-dark">Welcome Back, <span class="text-primary">User</span></h5>
+      <img src="https://ui-avatars.com/api/?name=User&background=667eea&color=fff" class="rounded-circle" width="35" alt="User">
+    </nav>
+
+    <div class="p-4">
+      <div class="row justify-content-center">
+
+        <div class="col-md-5 mb-4">
+          <div class="card stat-card bg-event shadow p-4 text-center">
+            <div class="mb-3">
+              <i class="fas fa-calendar-alt fa-3x"></i>
+            </div>
+            <h5>Available Events</h5>
+            <h2 class="fw-bold" th:text="${totalEvents}">12</h2>
+            <p class="small opacity-75">Discover new experiences today</p>
+            <a th:href="@{/user/events}" class="btn btn-glass w-100 mt-2">
+              Browse All Events
+            </a>
+          </div>
+        </div>
+
+        <div class="col-md-5 mb-4">
+          <div class="card stat-card bg-booked shadow p-4 text-center">
+            <div class="mb-3">
+              <i class="fas fa-check-double fa-3x"></i>
+            </div>
+            <h5>Your Bookings</h5>
+            <h2 class="fw-bold" th:text="${bookedEventsCount}">03</h2>
+            <p class="small opacity-75">Check your upcoming schedule</p>
+            <a th:href="@{/user/booked-events}" class="btn btn-glass w-100 mt-2">
+              View My Tickets
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

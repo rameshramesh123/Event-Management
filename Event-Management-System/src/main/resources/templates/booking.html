@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Booking</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="container mt-5">
+
+<h2 class="text-center">Confirm Booking</h2>
+
+<div class="card w-50 mx-auto mt-4">
+    <div class="card-body">
+        <p><strong>Event:</strong> <span th:text="${event.title}"></span></p>
+        <p><strong>Location:</strong> <span th:text="${event.location}"></span></p>
+        <p><strong>Date:</strong> <span th:text="${event.eventDate}"></span></p>
+
+        <form th:action="@{/confirmBooking}" method="post">
+            <input type="hidden" name="eventId" th:value="${event.id}">
+            <button type="submit" class="btn btn-success w-100">
+                Confirm Booking
+            </button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
